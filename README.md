@@ -4,7 +4,7 @@ Submitted by: **developer-az**
 
 About this web app: **A beautiful, modern web application for discovering and managing your favorite content creators. Users can add, view, edit, and delete content creators like YouTubers, streamers, and podcasters. Features a stunning glassmorphism UI with gradient backgrounds, search functionality, and responsive design.**
 
-Time spent: **8** hours
+Time spent: **10** hours
 
 ## Required Features
 
