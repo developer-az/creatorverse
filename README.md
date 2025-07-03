@@ -1,19 +1,90 @@
-# ✨ Creatorverse
+# WEB103 Prework - *✨ Creatorverse*
 
-A beautiful web application for discovering and managing your favorite content creators.
+Submitted by: **developer-az**
 
-## 🎯 Features
+About this web app: **A beautiful, modern web application for discovering and managing your favorite content creators. Users can add, view, edit, and delete content creators like YouTubers, streamers, and podcasters. Features a stunning glassmorphism UI with gradient backgrounds, search functionality, and responsive design.**
 
-- **Add Creators**: Store information about your favorite YouTubers, streamers, and content creators
-- **Search & Filter**: Quickly find creators with real-time search
-- **Beautiful UI**: Modern glassmorphism design with smooth animations
-- **Responsive Design**: Works perfectly on desktop and mobile
-- **Database Powered**: Uses Supabase for reliable data storage
+Time spent: **8** hours
 
-## 🛠️ Technologies Used
+## Required Features
 
-- **Frontend**: React 19, React Router
-- **Styling**: CSS3 with glassmorphism effects
-- **Database**: Supabase (PostgreSQL)
-- **Build Tool**: Vite
-- **Deployment**: Ready for Vercel/Netlify
+The following **required** functionality is completed:
+
+<!-- 👉🏿👉🏿👉🏿 Make sure to check off completed functionality below -->
+- [x] **A logical component structure in React is used to create the frontend of the app**
+- [x] **At least five content creators are displayed on the homepage of the app**
+- [x] **Each content creator item includes their name, a link to their channel/page, and a short description of their content**
+- [x] **API calls use the async/await design pattern via Axios or fetch()**
+- [x] **Clicking on a content creator item takes the user to their details page, which includes their name, url, and description**
+- [x] **Each content creator has their own unique URL**
+- [x] **The user can edit a content creator to change their name, url, or description**
+- [x] **The user can delete a content creator**
+- [x] **The user can add a new content creator by entering a name, url, or description and then it is displayed on the homepage**
+
+The following **optional** features are implemented:
+
+- [x] Picocss is used to style HTML elements
+- [x] The content creator items are displayed in a creative format, like cards instead of a list
+- [x] An image of each content creator is shown on their content creator card
+
+The following **additional** features are implemented:
+
+* [x] **Real-time search functionality** - Users can search creators by name or description
+* [x] **Grid/List view toggle** - Switch between grid and list layouts for better viewing options
+* [x] **Statistics dashboard** - Shows total creators, creators with photos, and described creators
+* [x] **Glassmorphism UI design** - Modern frosted glass effect with backdrop blur
+* [x] **Gradient backgrounds** - Beautiful purple-to-blue gradient design
+* [x] **Responsive design** - Works perfectly on desktop, tablet, and mobile devices
+* [x] **Smooth animations** - Hover effects, transitions, and micro-interactions
+* [x] **Environment variables** - Secure configuration using Vite environment variables
+* [x] **Loading states** - Beautiful loading animations with personality
+* [x] **Empty states** - Helpful messaging when no creators exist or no search results
+* [x] **Form validation** - Required field validation and proper input types
+* [x] **Modern React practices** - Hooks, functional components, and proper state management
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented required features:
+
+👉🏿<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+<!-- Replace this with whatever GIF tool you used! -->
+GIF created with ... 👉🏿 ScreenToGif
+<!-- Recommended tools:
+[Kap](https://getkap.co/) for macOS
+[ScreenToGif](https://www.screentogif.com/) for Windows
+[peek](https://github.com/phw/peek) for Linux. -->
+
+## Notes
+
+### Challenges Encountered:
+- **Supabase Setup**: Initially had issues with database table configuration, particularly with UUID primary key auto-generation
+- **Styling Conflicts**: Had to resolve conflicts between index.css and App.css for proper theming
+- **Git Security**: Encountered GitGuardian security warnings for API keys, resolved by implementing environment variables
+- **Responsive Design**: Ensuring the glassmorphism effects worked properly across different screen sizes
+
+### Technical Decisions:
+- **Supabase over Firebase**: Chose Supabase for its PostgreSQL foundation and excellent developer experience
+- **Vite over Create React App**: Used Vite for faster development and better build performance
+- **CSS over component libraries**: Built custom CSS for unique glassmorphism design rather than using pre-built components
+- **Environment variables**: Implemented proper security practices even though anon keys are safe to expose
+
+### Additional Context:
+This project showcases modern web development practices including:
+- **Full-stack development** with React frontend and Supabase backend
+- **Modern UI/UX design** following current design trends
+- **Security best practices** with environment variable configuration
+- **Accessibility considerations** with proper contrast and semantic markup
+- **Performance optimization** with efficient database queries and image handling
+
+The app demonstrates proficiency in React development, database management, modern CSS techniques, and overall full-stack web application architecture.
+
+## License
+
+Copyright [2025] [developer-az]
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+> http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
