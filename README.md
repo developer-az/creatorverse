@@ -31,8 +31,7 @@ The following **additional** features are implemented:
 * [x] **Real-time search functionality** - Users can search creators by name or description
 * [x] **Grid/List view toggle** - Switch between grid and list layouts for better viewing options
 * [x] **Statistics dashboard** - Shows total creators, creators with photos, and described creators
-* [x] **Glassmorphism UI design** - Modern frosted glass effect with backdrop blur
-* [x] **Gradient backgrounds** - Beautiful purple-to-blue gradient design
+* [x] **Gradient backgrounds** - purple-to-blue gradient design
 * [x] **Responsive design** - Works perfectly on desktop, tablet, and mobile devices
 * [x] **Smooth animations** - Hover effects, transitions, and micro-interactions
 * [x] **Environment variables** - Secure configuration using Vite environment variables
