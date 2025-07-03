@@ -45,7 +45,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-👉🏿 https://www.loom.com/share/677828c23c634dbc90a6a18c5a83fa27?sid=aa3ea5bb-a58d-4d77-a9bb-cd64b590697f
+👉🏿 [https://www.loom.com/share/677828c23c634dbc90a6a18c5a83fa27?sid=aa3ea5bb-a58d-4d77-a9bb-cd64b590697f](https://www.loom.com/share/d6de47728ed349e5bef08701dc616400?sid=2620b250-9793-42ae-b5e3-a3927318a209)
 <img src='https://i.imgur.com/KG0aPhv.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
