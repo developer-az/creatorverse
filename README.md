@@ -59,8 +59,6 @@ GIF created with ... 👉🏿 LICEcap
 - **Responsive Design**: Ensuring the glassmorphism effects worked properly across different screen sizes
 
 ### Technical Decisions:
-- **Supabase over Firebase**: Chose Supabase for its PostgreSQL foundation and excellent developer experience
-- **Vite over Create React App**: Used Vite for faster development and better build performance
 - **CSS over component libraries**: Built custom CSS for unique glassmorphism design rather than using pre-built components
 - **Environment variables**: Implemented proper security practices even though anon keys are safe to expose
 
