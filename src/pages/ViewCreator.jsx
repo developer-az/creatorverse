@@ -7,6 +7,7 @@ const ViewCreator = () => {
   const navigate = useNavigate()
   const [creator, setCreator] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     fetchCreator()
@@ -33,7 +34,8 @@ const ViewCreator = () => {
   }
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this creator?')) {
+    if (window.confirm('Are you sure you want to delete this creator? This action cannot be undone.')) {
+      setIsDeleting(true)
       try {
         const { error } = await supabase
           .from('creators')
@@ -50,109 +52,102 @@ const ViewCreator = () => {
       } catch (error) {
         console.error('Error:', error)
         alert('Error deleting creator!')
+      } finally {
+        setIsDeleting(false)
       }
     }
   }
 
   if (loading) {
-    return <div style={{ textAlign: 'center' }}>Loading...</div>
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+        <p>Loading creator details...</p>
+      </div>
+    )
   }
 
   if (!creator) {
     return (
-      <div style={{ textAlign: 'center' }}>
-        <h2>Creator not found</h2>
-        <Link to="/">
-          <button>← Back to Home</button>
+      <div className="empty-state">
+        <div className="empty-icon">❌</div>
+        <h3>Creator Not Found</h3>
+        <p>The creator you're looking for doesn't exist or may have been removed.</p>
+        <Link to="/" className="btn-primary">
+          <span>🏠</span> Back to Home
         </Link>
       </div>
     )
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '20px' }}>
+    <div className="creator-detail">
+      <div className="back-link">
         <Link to="/">
-          <button style={{ 
-            backgroundColor: '#6c757d', 
-            color: 'white',
-            marginRight: '10px'
-          }}>
-            ← Back to Home
-          </button>
+          <span>←</span> Back to Creators
         </Link>
       </div>
 
-      <div className="card" style={{ maxWidth: 'none' }}>
+      <div className="creator-card">
         {creator.imageURL && (
-          <img 
-            src={creator.imageURL} 
-            alt={creator.name}
-            style={{ 
-              width: '100%', 
-              height: '300px', 
-              objectFit: 'cover',
-              borderRadius: '8px',
-              marginBottom: '20px'
-            }}
-          />
-        )}
-        
-        <h1 style={{ marginBottom: '20px' }}>{creator.name}</h1>
-        
-        {creator.url && (
-          <div style={{ marginBottom: '20px' }}>
-            <strong>Channel/Page:</strong>
-            <br />
-            <a 
-              href={creator.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ 
-                color: '#007bff', 
-                fontSize: '18px',
-                textDecoration: 'none'
+          <div className="creator-image-container">
+            <img 
+              src={creator.imageURL} 
+              alt={creator.name}
+              className="creator-image"
+              onError={(e) => {
+                e.target.style.display = 'none'
               }}
-            >
-              🔗 {creator.url}
-            </a>
+            />
           </div>
         )}
         
-        {creator.description && (
-          <div style={{ marginBottom: '30px' }}>
-            <strong>Description:</strong>
-            <p style={{ 
-              fontSize: '16px', 
-              lineHeight: '1.6',
-              marginTop: '10px'
-            }}>
-              {creator.description}
-            </p>
-          </div>
-        )}
-        
-        <div className="card-actions">
-          <Link to={`/creator/${creator.id}/edit`}>
-            <button style={{ 
-              backgroundColor: '#ffc107', 
-              color: 'black',
-              marginRight: '10px'
-            }}>
-              ✏️ Edit Creator
-            </button>
-          </Link>
+        <div className="creator-info">
+          <h1 className="creator-name">{creator.name}</h1>
           
-          <button 
-            onClick={handleDelete}
-            className="delete-btn"
-            style={{ 
-              backgroundColor: '#dc3545', 
-              color: 'white'
-            }}
-          >
-            🗑️ Delete Creator
-          </button>
+          {creator.description && (
+            <div className="creator-description">
+              <h3>About</h3>
+              <p>{creator.description}</p>
+            </div>
+          )}
+          
+          {creator.url && (
+            <div className="creator-link">
+              <h3>Channel/Page</h3>
+              <a 
+                href={creator.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="external-link"
+              >
+                <span>🔗</span> Visit Channel
+                <span className="external-icon">↗</span>
+              </a>
+            </div>
+          )}
+          
+          <div className="creator-actions">
+            <Link to={`/creator/${creator.id}/edit`} className="btn-primary">
+              <span>✏️</span> Edit Creator
+            </Link>
+            
+            <button 
+              onClick={handleDelete}
+              className="delete-btn"
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <span className="loading-dots">⏳</span> Deleting...
+                </>
+              ) : (
+                <>
+                  <span>🗑️</span> Delete Creator
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

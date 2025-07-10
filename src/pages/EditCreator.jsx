@@ -12,6 +12,8 @@ const EditCreator = () => {
     imageURL: ''
   })
   const [loading, setLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     fetchCreator()
@@ -46,6 +48,7 @@ const EditCreator = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsSubmitting(true)
     
     try {
       const { error } = await supabase
@@ -68,11 +71,14 @@ const EditCreator = () => {
     } catch (error) {
       console.error('Error:', error)
       alert('Error updating creator!')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this creator?')) {
+    if (window.confirm('Are you sure you want to delete this creator? This action cannot be undone.')) {
+      setIsDeleting(true)
       try {
         const { error } = await supabase
           .from('creators')
@@ -89,21 +95,30 @@ const EditCreator = () => {
       } catch (error) {
         console.error('Error:', error)
         alert('Error deleting creator!')
+      } finally {
+        setIsDeleting(false)
       }
     }
   }
 
   if (loading) {
-    return <div style={{ textAlign: 'center' }}>Loading...</div>
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+        <p>Loading creator details...</p>
+      </div>
+    )
   }
 
   return (
     <div className="creator-form">
-      <h2>Edit Creator</h2>
+      <h2 className="form-title">Edit Creator</h2>
       
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Name *</label>
+          <label htmlFor="name">
+            <span>👤</span> Creator Name *
+          </label>
           <input
             type="text"
             id="name"
@@ -111,12 +126,15 @@ const EditCreator = () => {
             value={creator.name}
             onChange={handleChange}
             required
-            placeholder="Enter creator's name"
+            placeholder="Enter the creator's name or handle"
+            disabled={isSubmitting}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="url">Channel/Page URL *</label>
+          <label htmlFor="url">
+            <span>🔗</span> Channel/Page URL *
+          </label>
           <input
             type="url"
             id="url"
@@ -124,68 +142,86 @@ const EditCreator = () => {
             value={creator.url}
             onChange={handleChange}
             required
-            placeholder="https://..."
+            placeholder="https://youtube.com/@creator or https://twitch.tv/creator"
+            disabled={isSubmitting}
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">
+            <span>📝</span> Description
+          </label>
           <textarea
             id="description"
             name="description"
             value={creator.description}
             onChange={handleChange}
             rows="4"
-            placeholder="Describe what kind of content they create..."
+            placeholder="Describe what kind of content they create, their style, or why you like them..."
+            disabled={isSubmitting}
           ></textarea>
         </div>
 
         <div className="form-group">
-          <label htmlFor="imageURL">Image URL (optional)</label>
+          <label htmlFor="imageURL">
+            <span>🖼️</span> Profile Image URL (optional)
+          </label>
           <input
             type="url"
             id="imageURL"
             name="imageURL"
             value={creator.imageURL}
             onChange={handleChange}
-            placeholder="https://..."
+            placeholder="https://example.com/profile-image.jpg"
+            disabled={isSubmitting}
           />
+          <small className="form-help">
+            Add a direct link to their profile picture or channel banner
+          </small>
         </div>
 
         <div className="form-actions">
           <button 
             type="submit"
-            style={{ 
-              backgroundColor: '#28a745', 
-              color: 'white',
-              marginRight: '10px'
-            }}
+            className="btn-primary"
+            disabled={isSubmitting}
           >
-            💾 Update Creator
+            {isSubmitting ? (
+              <>
+                <span className="loading-dots">⏳</span> Updating...
+              </>
+            ) : (
+              <>
+                <span>💾</span> Update Creator
+              </>
+            )}
           </button>
           
           <Link to={`/creator/${id}`}>
             <button 
               type="button"
-              style={{ 
-                backgroundColor: '#6c757d', 
-                color: 'white',
-                marginRight: '10px'
-              }}
+              className="btn-secondary"
+              disabled={isSubmitting}
             >
-              Cancel
+              <span>↩️</span> Cancel
             </button>
           </Link>
 
           <button 
             type="button"
             onClick={handleDelete}
-            style={{ 
-              backgroundColor: '#dc3545', 
-              color: 'white'
-            }}
+            className="delete-btn"
+            disabled={isSubmitting || isDeleting}
           >
-            🗑️ Delete Creator
+            {isDeleting ? (
+              <>
+                <span className="loading-dots">⏳</span> Deleting...
+              </>
+            ) : (
+              <>
+                <span>🗑️</span> Delete Creator
+              </>
+            )}
           </button>
         </div>
       </form>

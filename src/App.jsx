@@ -12,6 +12,21 @@ function App() {
   const [loading, setLoading] = useState(true)
   const location = useLocation()
 
+  // Parallax effect for background
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.pageYOffset
+      const parallax = document.querySelector('.App')
+      if (parallax) {
+        const speed = scrolled * 0.5
+        parallax.style.transform = `translateY(${speed}px)`
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const fetchCreators = async () => {
     try {
       const { data } = await supabase
@@ -68,8 +83,12 @@ function App() {
           <p>Discover amazing content creators!</p>
         </header>
         <div className="loading">
-          <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🚀</div>
-          Loading your creator universe...
+          <div className="loading-spinner"></div>
+          <p>Loading your creator universe...</p>
+          <p className="loading-subtitle">Preparing to showcase amazing content creators</p>
+          <div className="loading-progress">
+            <div className="progress-bar"></div>
+          </div>
         </div>
       </div>
     )
@@ -82,6 +101,11 @@ function App() {
           <header className="header">
             <h1>✨ Creatorverse</h1>
             <p>Discover amazing content creators from across the internet</p>
+            <div className="header-decoration">
+              <div className="floating-orb orb-1"></div>
+              <div className="floating-orb orb-2"></div>
+              <div className="floating-orb orb-3"></div>
+            </div>
           </header>
           
           {location.pathname === '/' && creators.length > 0 && (

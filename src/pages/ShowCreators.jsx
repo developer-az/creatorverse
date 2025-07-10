@@ -1,15 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const ShowCreators = ({ creators }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
+  const [hoveredCard, setHoveredCard] = useState(null)
 
   // Filter creators based on search term
   const filteredCreators = creators.filter(creator =>
     creator.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     creator.description?.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  // Highlight search terms in text
+  const highlightText = (text, searchTerm) => {
+    if (!searchTerm) return text
+    const regex = new RegExp(`(${searchTerm})`, 'gi')
+    return text.replace(regex, '<mark>$1</mark>')
+  }
+
+  // Card hover effect
+  const handleCardHover = (index) => {
+    setHoveredCard(index)
+  }
+
+  const handleCardLeave = () => {
+    setHoveredCard(null)
+  }
 
   return (
     <div>
@@ -18,11 +35,14 @@ const ShowCreators = ({ creators }) => {
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Search creators..."
+            placeholder="Search creators by name or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
+          {searchTerm && (
+            <div className="search-icon">🔍</div>
+          )}
         </div>
       )}
 
@@ -40,42 +60,67 @@ const ShowCreators = ({ creators }) => {
             className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
             onClick={() => setViewMode('grid')}
           >
-            Grid View
+            <span>⊞</span> Grid View
           </button>
           <button 
             className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
             onClick={() => setViewMode('list')}
           >
-            List View
+            <span>☰</span> List View
           </button>
         </div>
       )}
 
       {/* Results Count */}
       {searchTerm && (
-        <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.8)', marginBottom: '30px' }}>
-          {filteredCreators.length} creator{filteredCreators.length !== 1 ? 's' : ''} found
+        <div className="search-results">
+          <p>
+            Found <strong>{filteredCreators.length}</strong> creator{filteredCreators.length !== 1 ? 's' : ''} 
+            {searchTerm && ` for "${searchTerm}"`}
+          </p>
         </div>
       )}
 
       {/* Creators Grid */}
       {filteredCreators && filteredCreators.length > 0 ? (
         <div className={`creators-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
-          {filteredCreators.map((creator) => (
-            <div key={creator.id} className="card">
+          {filteredCreators.map((creator, index) => (
+            <div 
+              key={creator.id} 
+              className={`card ${hoveredCard === index ? 'card-hovered' : ''}`}
+              onMouseEnter={() => handleCardHover(index)}
+              onMouseLeave={handleCardLeave}
+              style={{
+                '--mouse-x': '50%',
+                '--mouse-y': '50%'
+              }}
+            >
               {creator.imageURL && (
-                <img 
-                  src={creator.imageURL} 
-                  alt={creator.name}
-                  className="card-image"
-                />
+                <div className="card-image-container">
+                  <img 
+                    src={creator.imageURL} 
+                    alt={creator.name}
+                    className="card-image"
+                    onError={(e) => {
+                      e.target.style.display = 'none'
+                    }}
+                  />
+                </div>
               )}
               
               <div className="card-content">
-                <h3>{creator.name}</h3>
+                <h3 
+                  dangerouslySetInnerHTML={{ 
+                    __html: highlightText(creator.name, searchTerm) 
+                  }}
+                />
                 
                 {creator.description && (
-                  <p>{creator.description}</p>
+                  <p 
+                    dangerouslySetInnerHTML={{ 
+                      __html: highlightText(creator.description, searchTerm) 
+                    }}
+                  />
                 )}
                 
                 {creator.url && (
@@ -91,10 +136,10 @@ const ShowCreators = ({ creators }) => {
                 
                 <div className="card-actions">
                   <Link to={`/creator/${creator.id}`} className="btn-primary">
-                    View
+                    <span>👁️</span> View
                   </Link>
                   <Link to={`/creator/${creator.id}/edit`} className="btn-secondary">
-                    Edit
+                    <span>✏️</span> Edit
                   </Link>
                 </div>
               </div>
@@ -103,21 +148,29 @@ const ShowCreators = ({ creators }) => {
         </div>
       ) : creators.length === 0 ? (
         <div className="empty-state">
-          <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🌟</div>
+          <div className="empty-icon">🌟</div>
           <h3>Start Your Creator Journey</h3>
-          <p>Build your personal collection of amazing content creators. Add YouTubers, streamers, podcasters, and more!</p>
+          <p>Build your personal collection of amazing content creators. Add YouTubers, streamers, podcasters, and more to discover the best content across the internet.</p>
           <Link to="/add" className="btn-primary">
             <span>🚀</span> Add Your First Creator
           </Link>
         </div>
       ) : (
         <div className="empty-state">
-          <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🔍</div>
+          <div className="empty-icon">🔍</div>
           <h3>No Results Found</h3>
-          <p>Try adjusting your search terms or add a new creator.</p>
-          <Link to="/add" className="btn-primary">
-            <span>➕</span> Add New Creator
-          </Link>
+          <p>We couldn't find any creators matching your search. Try adjusting your search terms or add a new creator to your collection.</p>
+          <div className="empty-actions">
+            <button 
+              onClick={() => setSearchTerm('')} 
+              className="btn-secondary"
+            >
+              <span>↺</span> Clear Search
+            </button>
+            <Link to="/add" className="btn-primary">
+              <span>➕</span> Add New Creator
+            </Link>
+          </div>
         </div>
       )}
     </div>
