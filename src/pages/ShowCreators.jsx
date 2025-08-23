@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { getPlatformFromUrl, calculateQualityScore } from '../utils/analytics'
 
 const ShowCreators = ({ creators }) => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -51,6 +52,11 @@ const ShowCreators = ({ creators }) => {
         <Link to="/add" className="btn-primary">
           <span>✨</span> Add New Creator
         </Link>
+        {creators.length > 0 && (
+          <Link to="/analytics" className="btn-secondary">
+            <span>📊</span> View Analytics
+          </Link>
+        )}
       </div>
 
       {/* View Toggle */}
@@ -108,31 +114,42 @@ const ShowCreators = ({ creators }) => {
                 </div>
               )}
               
-              <div className="card-content">
-                <h3 
-                  dangerouslySetInnerHTML={{ 
-                    __html: highlightText(creator.name, searchTerm) 
-                  }}
-                />
                 
-                {creator.description && (
-                  <p 
+                <div className="card-content">
+                  <h3 
                     dangerouslySetInnerHTML={{ 
-                      __html: highlightText(creator.description, searchTerm) 
+                      __html: highlightText(creator.name, searchTerm) 
                     }}
                   />
-                )}
-                
-                {creator.url && (
-                  <a 
-                    href={creator.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="card-url"
-                  >
-                    <span>🔗</span> Visit Channel
-                  </a>
-                )}
+                  
+                  <div className="creator-meta">
+                    <span className="platform-tag">{getPlatformFromUrl(creator.url)}</span>
+                    <span className="quality-badge" title={`Quality Score: ${calculateQualityScore(creator)}%`}>
+                      {calculateQualityScore(creator) >= 90 ? '🏆' : 
+                       calculateQualityScore(creator) >= 70 ? '⭐' : 
+                       calculateQualityScore(creator) >= 50 ? '👍' : '📝'}
+                      {calculateQualityScore(creator)}%
+                    </span>
+                  </div>
+                  
+                  {creator.description && (
+                    <p 
+                      dangerouslySetInnerHTML={{ 
+                        __html: highlightText(creator.description, searchTerm) 
+                      }}
+                    />
+                  )}
+                  
+                  {creator.url && (
+                    <a 
+                      href={creator.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="card-url"
+                    >
+                      <span>🔗</span> Visit Channel
+                    </a>
+                  )}
                 
                 <div className="card-actions">
                   <Link to={`/creator/${creator.id}`} className="btn-primary">

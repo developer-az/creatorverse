@@ -4,7 +4,9 @@ import ShowCreators from './pages/ShowCreators'
 import ViewCreator from './pages/ViewCreator'
 import EditCreator from './pages/EditCreator'
 import AddCreator from './pages/AddCreator'
+import Analytics from './pages/Analytics'
 import { supabase } from './client'
+import { getComprehensiveAnalytics, getPlatformFromUrl, calculateQualityScore } from './utils/analytics'
 import './App.css'
 
 function App() {
@@ -63,6 +65,10 @@ function App() {
       element: <AddCreator />
     },
     {
+      path: "/analytics",
+      element: <Analytics creators={creators} />
+    },
+    {
       path: "/creator/:id",
       element: <ViewCreator />
     },
@@ -73,7 +79,7 @@ function App() {
   ])
 
   // Don't show header on detail pages
-  const isDetailPage = location.pathname !== '/' && location.pathname !== '/add'
+  const isDetailPage = location.pathname !== '/' && location.pathname !== '/add' && location.pathname !== '/analytics'
 
   if (loading) {
     return (
@@ -112,15 +118,28 @@ function App() {
             <div className="stats-bar">
               <div className="stat-item">
                 <span className="stat-number">{creators.length}</span>
-                <span className="stat-label">Creators</span>
+                <span className="stat-label">Total Creators</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">{creators.filter(c => c.imageURL).length}</span>
-                <span className="stat-label">With Photos</span>
+                <span className="stat-number">{Math.round((creators.filter(c => c.imageURL && c.description && c.url && c.name).length / creators.length) * 100)}%</span>
+                <span className="stat-label">Complete Profiles</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">{creators.filter(c => c.description).length}</span>
-                <span className="stat-label">Described</span>
+                <span className="stat-number">{(() => {
+                  const platforms = [...new Set(creators.map(c => getPlatformFromUrl(c.url)))].length;
+                  return platforms;
+                })()}</span>
+                <span className="stat-label">Platforms</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">{Math.round(creators.reduce((sum, creator) => sum + calculateQualityScore(creator), 0) / creators.length)}%</span>
+                <span className="stat-label">Avg Quality</span>
+              </div>
+              <div className="stat-item" style={{ borderLeft: '2px solid var(--primary-500)', paddingLeft: 'var(--space-4)' }}>
+                <a href="/analytics" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <span className="stat-number">📊</span>
+                  <span className="stat-label">View Analytics</span>
+                </a>
               </div>
             </div>
           )}
