@@ -8,3 +8,10 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 export const supabase = (supabaseUrl && supabaseKey) 
   ? createClient(supabaseUrl, supabaseKey)
   : mockSupabase
+
+// Log which mode we're running in
+if (supabaseUrl && supabaseKey) {
+  console.log('🚀 Creatorverse: Running with Supabase backend')
+} else {
+  console.log('🎭 Creatorverse: Running with mock data (no Supabase credentials)')
+}

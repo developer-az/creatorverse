@@ -88,6 +88,14 @@ export const mockSupabase = {
     select: (fields = '*') => ({
       order: (field, options) => ({
         then: (callback) => callback({ data: mockCreators, error: null })
+      }),
+      eq: (field, value) => ({
+        single: () => ({
+          then: (callback) => {
+            const creator = mockCreators.find(c => c[field] == value)
+            callback({ data: creator, error: creator ? null : { message: 'Creator not found' } })
+          }
+        })
       })
     }),
     insert: (data) => ({
@@ -102,7 +110,7 @@ export const mockSupabase = {
     update: (data) => ({
       eq: (field, value) => ({
         then: (callback) => {
-          const index = mockCreators.findIndex(c => c[field] === value)
+          const index = mockCreators.findIndex(c => c[field] == value)
           if (index >= 0) {
             mockCreators[index] = { ...mockCreators[index], ...data }
             callback({ data: [mockCreators[index]], error: null })
@@ -115,7 +123,7 @@ export const mockSupabase = {
     delete: () => ({
       eq: (field, value) => ({
         then: (callback) => {
-          const index = mockCreators.findIndex(c => c[field] === value)
+          const index = mockCreators.findIndex(c => c[field] == value)
           if (index >= 0) {
             mockCreators.splice(index, 1)
             callback({ data: null, error: null })
