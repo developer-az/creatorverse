@@ -14,19 +14,14 @@ function App() {
   const [loading, setLoading] = useState(true)
   const location = useLocation()
 
-  // Parallax effect for background
+  // Smooth scrolling optimization
   useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.pageYOffset
-      const parallax = document.querySelector('.App')
-      if (parallax) {
-        const speed = scrolled * 0.5
-        parallax.style.transform = `translateY(${speed}px)`
-      }
+    // Enable smooth scrolling for the entire page
+    document.documentElement.style.scrollBehavior = 'smooth'
+    
+    return () => {
+      document.documentElement.style.scrollBehavior = 'auto'
     }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const fetchCreators = async () => {

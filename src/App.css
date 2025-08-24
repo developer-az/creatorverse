@@ -123,6 +123,17 @@ html {
   font-size: 16px;
 }
 
+/* Performance optimizations for smooth scrolling */
+* {
+  will-change: auto;
+}
+
+.card, .btn-primary, .btn-secondary, .delete-btn, .view-btn {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
 body {
   font-family: var(--font-sans);
   background: var(--bg-primary);
@@ -470,9 +481,10 @@ body::before {
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-2xl);
   border-color: var(--border-accent);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .card:hover::before {
@@ -1224,7 +1236,7 @@ a:hover {
 }
 
 .card-hovered {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
 }
 
@@ -1282,7 +1294,7 @@ mark {
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-4px);
 }
 
 
