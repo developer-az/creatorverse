@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useRoutes, useLocation } from 'react-router-dom'
+import { useRoutes, useLocation, Link } from 'react-router-dom'
 import ShowCreators from './pages/ShowCreators'
 import ViewCreator from './pages/ViewCreator'
 import EditCreator from './pages/EditCreator'
@@ -131,10 +131,10 @@ function App() {
                 <span className="stat-label">Avg Quality</span>
               </div>
               <div className="stat-item" style={{ borderLeft: '2px solid var(--primary-500)', paddingLeft: 'var(--space-4)' }}>
-                <a href="/analytics" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to="/analytics" style={{ textDecoration: 'none', color: 'inherit' }}>
                   <span className="stat-number">📊</span>
                   <span className="stat-label">View Analytics</span>
-                </a>
+                </Link>
               </div>
             </div>
           )}
