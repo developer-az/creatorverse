@@ -6,6 +6,25 @@ const Analytics = ({ creators }) => {
   const [analytics, setAnalytics] = useState(null)
   const [selectedView, setSelectedView] = useState('overview')
 
+  // Suppress external script errors that don't affect our app
+  useEffect(() => {
+    const originalError = console.error
+    console.error = (...args) => {
+      // Filter out external script errors (Canvas, analytics, etc.)
+      const message = args.join(' ')
+      if (!message.includes('Canvas') && 
+          !message.includes('analytics') && 
+          !message.includes('favicon') &&
+          !message.includes('start.js')) {
+        originalError.apply(console, args)
+      }
+    }
+    
+    return () => {
+      console.error = originalError
+    }
+  }, [])
+
   useEffect(() => {
     if (creators && creators.length > 0) {
       const analyticsData = getComprehensiveAnalytics(creators)
