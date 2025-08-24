@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "puppeteer": "^24.17.0",
     "vite": "^6.3.5"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
+    "node-fetch": "^3.3.2",
     "react-router-dom": "^7.6.2"
   }
 }
